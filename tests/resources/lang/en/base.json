@@ -1,0 +1,6 @@
+{
+  "example_default_language_only": "This is always in the default language",
+  "greeting.substitution.symphonyStyle": "Hello, :name",
+  "greeting.substitution.i18nNextStyle": "Hello, {{name}}",
+  "greeting.withMarkup": "Hi, {{name}}. Click <0>this link</0> please."
+}

@@ -1,0 +1,20 @@
+# composer
+/vendor/
+composer.lock
+
+# tests
+phpunit.xml
+clover.xml
+coverage*
+.phpunit.result.cache
+
+# system
+.DS_Store
+
+# editors
+.idea
+*.swp
+
+# lint
+.php_cs.cache
+.php_cs

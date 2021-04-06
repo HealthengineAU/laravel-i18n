@@ -1,0 +1,5 @@
+{
+  "greeting.substitution.i18nNextStyle": "Bonjour, {{name}}",
+  "greeting.withMarkup": "Bonjour {{name}}. Cliquez sur <0>ce lien</0> s'il vous plaît.",
+  "example_overridden": "You should not see this"
+}

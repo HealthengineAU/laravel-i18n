@@ -1,0 +1,3 @@
+{
+  "example_default_language_only": "This namespace is lower order, so this string should never get loaded."
+}
