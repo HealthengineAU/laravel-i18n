@@ -1,6 +1,6 @@
 <?php
 
-namespace HealthEngine\I18n\Providers;
+namespace HealthEngine\I18n;
 
 use HealthEngine\I18n\Http\Middleware\AcceptLanguage;
 use HealthEngine\I18n\Http\Middleware\Detectors\CookieDetector;
@@ -10,33 +10,36 @@ use HealthEngine\I18n\Http\Middleware\DetectLanguage;
 use HealthEngine\I18n\Http\Middleware\HasLanguage;
 use HealthEngine\I18n\Translator\LanguageLoader;
 use HealthEngine\I18n\Translator\Translator;
-use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationServiceProvider;
+use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\ServiceProvider;
 
-final class TranslationServiceProvider extends IlluminateTranslationServiceProvider
+final class TranslationServiceProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
-     * Bootstrap any package services.
+     * Bootstrap package services.
      *
      * @return void
      */
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/i18n.php' => config_path('i18n.php'),
-        ]);
+            __DIR__ . '/config/i18n.php' => config_path('i18n.php'),
+        ], ['config', 'i18n']);
 
         $this->publishes([
-            __DIR__ . '/../resources/lang' => resource_path('lang'),
-        ]);
+            __DIR__ . '/resources/lang' => resource_path('lang'),
+        ], ['lang', 'i18n']);
     }
 
     /**
+     * Register package services.
+     *
      * @return void
      */
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/i18n.php',
+            __DIR__ . '/config/i18n.php',
             'i18n'
         );
 
@@ -112,5 +115,24 @@ final class TranslationServiceProvider extends IlluminateTranslationServiceProvi
 
             return new DetectLanguage($detectorOrder, $saveCookie);
         });
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides()
+    {
+        return [
+            'translator',
+            'i18n.loader',
+            ParameterDetector::class,
+            HeaderDetector::class,
+            CookieDetector::class,
+            DetectLanguage::class,
+            AcceptLanguage::class,
+            HasLanguage::class,
+        ];
     }
 }

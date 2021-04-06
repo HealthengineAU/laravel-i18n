@@ -2,7 +2,8 @@
 
 namespace HealthEngine\I18n\Tests;
 
-use HealthEngine\I18n\Providers\TranslationServiceProvider;
+use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationServiceProvider;
+use HealthEngine\I18n\TranslationServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -16,15 +17,13 @@ class TestCase extends BaseTestCase
     }
 
     /**
-     * Get package providers.
-     *
      * @param  Application $app
      * @return string[]
      */
-    protected function getPackageProviders($app)
+    protected function overrideApplicationProviders($app)
     {
         return [
-            TranslationServiceProvider::class,
+            IlluminateTranslationServiceProvider::class => TranslationServiceProvider::class,
         ];
     }
 }

@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Language
+    | Base Language / Fallback Language
     |--------------------------------------------------------------------------
     */
 
@@ -26,7 +26,7 @@ return [
         | Path where language files are to be located.
         |
         */
-        'base_path' => 'resources/lang',
+        'base_path' => resource_path('lang'),
 
         /*
         |--------------------------------------------------------------------------
