@@ -2,6 +2,13 @@
 This is a custom package designed for Laravel Eloquent. It provides helpers used to manage flat JSON files for
 localisation.
 
+## Setup
+
+* Install the package: `composer require healthengine/laravel-i18n`
+* In `config/app.php`:
+    * Replace the `Illuminate\Support\TranslationServiceProvider` with `HealthEngine\I18n\TranslationServiceProvider`
+* Run `php artisan vendor:publish --provider="HealthEngine\I18n\TranslationServiceProvider"`
+
 ## Usage
 
 ### Multiple JSON files
