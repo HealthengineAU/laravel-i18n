@@ -55,12 +55,13 @@ final class Translator implements TranslatorContract
         $line = $this->loaded[$lang][$key] ?? null;
 
         if ($fallback && $line === null) {
-            return $this->get($key, $replace, $this->fallbackLanguage, false);
+            return $this->get($key, $replace, $this->fallbackLanguage, false, $markup);
         }
 
-        $line = $this->makePlaceholderReplacements($line ?? $key, $replace);
+        $line = $this->makeMarkupReplacements($line ?? $key, $markup);
+        $line = $this->makePlaceholderReplacements($line, $replace);
 
-        return $this->makeMarkupReplacements($line, $markup);
+        return $line;
     }
 
 
@@ -119,12 +120,40 @@ final class Translator implements TranslatorContract
 
     /**
      * @param string $line
-     * @param  string[] $markup
+     * @param string[] $markup
      * @return string
      */
     protected function makeMarkupReplacements(string $line, array $markup): string
     {
-        return preg_replace_array('/<\/?[0-9]>/', $markup, $line);
+        if (count($markup) === 0) {
+            return $line;
+        }
+
+        foreach ($markup as $key => $tag) {
+            $tag = $markup[$key];
+
+            if (strpos($line, "</$key>") === false) {
+                //
+                // Single tag (e.g. <br/>)
+                //
+                /** @var string $line */
+                $line = preg_replace("/<$key ?\/?>/", $tag, $line);
+            } else {
+                //
+                // Open/closed tags (e.g. <b></b>)
+                //
+                /** @var string $openTag */
+                /** @var string $closeTag */
+                $openTag = preg_replace('/([^ \/>]+) ?\/?>(<\/[a-z0-9]+>)?$/', '$1>', $tag);
+                $closeTag = preg_replace('/<([a-z0-9]+).*/', '</$1>', $tag);
+                $line = preg_replace_array("/<\/?$key>/", [$openTag, $closeTag], $line);
+            }
+        }
+
+        /** @var string $line */
+        $line = preg_replace('/<\/?[0-9]+>/', '', $line); // Strips missed tags.
+
+        return $line;
     }
 
     /**

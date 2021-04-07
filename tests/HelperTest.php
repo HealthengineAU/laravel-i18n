@@ -17,24 +17,6 @@ class HelperTest extends TestCase
         self::assertEquals($expected, $actual2);
     }
 
-    public function testSubstitutesMarkup(): void
-    {
-        $actual = i18n('greeting.withMarkup', ['name' => 'Sandra'], [
-            '<a href="#test_url">', '</a>',
-        ]);
-
-        self::assertEquals('Hi, Sandra. Click <a href="#test_url">this link</a> please.', $actual);
-    }
-
-    public function testSubstitutesMarkupWhenNoVars(): void
-    {
-        $actual = i18n('greeting.withOnlyMarkup', [], [
-            '<a href="https://fake.url/">', '</a>',
-        ]);
-
-        self::assertEquals('Hi, there! <a href="https://fake.url/">Click this link?</a>', $actual);
-    }
-
     public function testUsesCurrentLanguageWhenSet(): void
     {
         app()->setLocale('fr');
@@ -44,5 +26,100 @@ class HelperTest extends TestCase
         ]);
 
         self::assertEquals('Bonjour Cecile. Cliquez sur <a href="#test_url">ce lien</a> s\'il vous plaît.', $actual);
+    }
+
+    /**
+     * @dataProvider markupSubstitutionProvider
+     * @param string $string
+     * @param array<string, string> $replace
+     * @param string[] $markup
+     * @param string $expected
+     */
+    public function testSubstitutesMarkup(string $string, array $replace, array $markup, string $expected): void
+    {
+        $actual = i18n($string, $replace, $markup);
+
+        self::assertEquals($expected, $actual);
+    }
+
+    public function markupSubstitutionProvider(): array
+    {
+        return [
+            'Inserts at correct index' => [
+                'Hi! <1>Click this</1> <0>link?</0>',
+                [],
+                [
+                    '<a href="https://first.url/">',
+                    '<a href="https://second.url/" target="_blank" />'
+                ],
+                'Hi! <a href="https://second.url/" target="_blank">Click this</a> <a href="https://first.url/">link?</a>'
+            ],
+            'Inserts at explicit indices' => [
+                'Hi! <1>Click this</1> <0>link?</0>',
+                [],
+                [
+                    1 => '<a href="https://first.url/"/>',
+                    0 => '<a href="https://second.url/" />'
+                ],
+                'Hi! <a href="https://first.url/">Click this</a> <a href="https://second.url/">link?</a>'
+            ],
+            'Accepts double tag in the markup array' => [
+                'Hello <0>link</0>',
+                [],
+                ['<a href="#link"></a>'],
+                'Hello <a href="#link">link</a>'
+            ],
+            'Accepts single tag pattern 1' => [
+                'Hello <0>link</0>',
+                [],
+                ['<a href="#link" />'],
+                'Hello <a href="#link">link</a>'
+            ],
+            'Accepts single tag pattern 2' => [
+                'Hello <0>link</0>',
+                [],
+                ['<a href="#link" target="_blank" aria-label="example" />'],
+                'Hello <a href="#link" target="_blank" aria-label="example">link</a>'
+            ],
+            'Accepts single tag pattern 3' => [
+                'Hello <0>link</0>',
+                [],
+                ['<a href="#link">'],
+                'Hello <a href="#link">link</a>'
+            ],
+            'Accepts nested tags' => [
+                'Hello <0><1>link</1></0>',
+                [],
+                ['<h1>', '<b>'],
+                'Hello <h1><b>link</b></h1>'
+            ],
+            'Works with variables' => [
+                'Hello <0><1>{{name}}</1></0>',
+                ['name' => 'Patricia'],
+                ['<h1>', '<b>'],
+                'Hello <h1><b>Patricia</b></h1>'
+            ],
+            'Works with variables that have markup inside of them' => [
+                'What is <0><1>{{this}}</1></0>',
+                ['this' => '<a href="#example">Open me</a>'],
+                ['<h1>', '<b>'],
+                'What is <h1><b><a href="#example">Open me</a></b></h1>'
+            ],
+            'Solo tag is spat out exactly as it is put in' => [
+                'What is <0> trying <1>',
+                [],
+                [
+                    '<button name="submit" type="submit">',
+                    '<br/>'
+                ],
+                'What is <button name="submit" type="submit"> trying <br/>'
+            ],
+            'Strips missed tags' => [
+                '<0>Hey</0>, there is <1>missed tags</1> here.',
+                [],
+                ['<b></b>'],
+                '<b>Hey</b>, there is missed tags here.'
+            ]
+        ];
     }
 }
