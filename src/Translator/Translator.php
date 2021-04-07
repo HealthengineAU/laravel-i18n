@@ -132,21 +132,22 @@ final class Translator implements TranslatorContract
         foreach ($markup as $key => $tag) {
             $tag = $markup[$key];
 
-            if (strpos($line, "</$key>") === false) {
+            if (strpos($line, "</$key>") !== false || strpos($line, "<$key/>") !== false) {
                 //
-                // Single tag (e.g. <br/>)
-                //
-                /** @var string $line */
-                $line = preg_replace("/<$key ?\/?>/", $tag, $line);
-            } else {
-                //
-                // Open/closed tags (e.g. <b></b>)
+                // Open/closed tags --> "<b></b>"
                 //
                 /** @var string $openTag */
                 /** @var string $closeTag */
                 $openTag = preg_replace('/([^ \/>]+) ?\/?>(<\/[a-z0-9]+>)?$/', '$1>', $tag);
                 $closeTag = preg_replace('/<([a-z0-9]+).*/', '</$1>', $tag);
-                $line = preg_replace_array("/<\/?$key>/", [$openTag, $closeTag], $line);
+                $line = mb_eregi_replace("<$key>", $openTag, $line);
+                $line = mb_eregi_replace("<\/?$key\/?>", $closeTag, $line);
+            } else {
+                //
+                // Single tags --> "<br/>"
+                //
+                /** @var string $line */
+                $line = preg_replace("/<$key ?\/?>/", $tag, $line);
             }
         }
 

@@ -119,6 +119,12 @@ class HelperTest extends TestCase
                 [],
                 ['<b></b>'],
                 '<b>Hey</b>, there is missed tags here.'
+            ],
+            'Handles RTL languages' => [
+                '<0>سجّلْ الدخول<0/> بهدف حجزٍ أسرع عن طريق تفاصيلك المحفوظة',
+                [],
+                ['<a href="#a">'],
+                '<a href="#a">سجّلْ الدخول</a> بهدف حجزٍ أسرع عن طريق تفاصيلك المحفوظة',
             ]
         ];
     }
