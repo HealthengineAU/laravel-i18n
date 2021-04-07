@@ -58,7 +58,9 @@ final class Translator implements TranslatorContract
             return $this->get($key, $replace, $this->fallbackLanguage, false);
         }
 
-        return $this->makeReplacements($line  ?? $key, $replace, $markup);
+        $line = $this->makePlaceholderReplacements($line ?? $key, $replace);
+
+        return $this->makeMarkupReplacements($line, $markup);
     }
 
 
@@ -94,10 +96,9 @@ final class Translator implements TranslatorContract
      *
      * @param  string  $line
      * @param  array<string, string> $replace
-     * @param  string[] $markup
      * @return string
      */
-    protected function makeReplacements(string $line, array $replace, array $markup): string
+    protected function makePlaceholderReplacements(string $line, array $replace): string
     {
         if (count($replace) === 0) {
             return $line;
@@ -113,6 +114,16 @@ final class Translator implements TranslatorContract
             );
         }
 
+        return $line;
+    }
+
+    /**
+     * @param string $line
+     * @param  string[] $markup
+     * @return string
+     */
+    protected function makeMarkupReplacements(string $line, array $markup): string
+    {
         return preg_replace_array('/<\/?[0-9]>/', $markup, $line);
     }
 

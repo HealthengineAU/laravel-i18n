@@ -9,9 +9,9 @@ if (! function_exists('i18n')) {
      *
      * @param string $key
      * @param array<string, string> $vars (e.g. ['name' => 'Matthew'])
-     * @param string[] $markup (e.g. ['<a href="#page">', '</a>'])
      * @param ?string $lang
      * @param bool $fallback
+     * @param string[] $markup (e.g. ['<a href="#page">', '</a>'])
      * @return string
      */
     function i18n(

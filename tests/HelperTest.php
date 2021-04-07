@@ -26,6 +26,15 @@ class HelperTest extends TestCase
         self::assertEquals('Hi, Sandra. Click <a href="#test_url">this link</a> please.', $actual);
     }
 
+    public function testSubstitutesMarkupWhenNoVars(): void
+    {
+        $actual = i18n('greeting.withOnlyMarkup', [], [
+            '<a href="https://fake.url/">', '</a>',
+        ]);
+
+        self::assertEquals('Hi, there! <a href="https://fake.url/">Click this link?</a>', $actual);
+    }
+
     public function testUsesCurrentLanguageWhenSet(): void
     {
         app()->setLocale('fr');
