@@ -49,12 +49,12 @@ Basic support for HTML markup placeholders:
 
 ```json
 {
-  "text.with.link": "Hi, {{name}}. Click <0>here</0> to continue."
+  "text.with.link": "Hi, <0>{{name}}</0>. Click <1>here</1> to continue."
 }
 ```
 ```php
-i18n('text.with.link', ['name' => 'Bernadette'], ['<a href="#target"'>, '</a>'])
-// -> 'Hi, Bernadette. Click <a href="#target">here</a> to continue.'
+i18n('text.with.link', ['name' => 'Bernadette'], ['<b>', '<a href="#target" />'])
+// -> 'Hi, <b>Bernadette</b>. Click <a href="#target">here</a> to continue.'
 ```
 
 ### Middleware
@@ -62,7 +62,7 @@ i18n('text.with.link', ['name' => 'Bernadette'], ['<a href="#target"'>, '</a>'])
 You can add any of the attached middlwares to associate languages with requests:
 
 * **AcceptLanguage** - Set the language from the HTTP `Accept-Language` header.
-* **SetLanguage** - Set the language from the request parameter `lang`, and store it as a cookie.
+* **HasLanguage** - Use the language from the request parameter `lang` (and store it as a cookie).
 * **DetectLanguage** - Automatically determine the best language.
 
 ```php
