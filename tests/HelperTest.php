@@ -128,4 +128,13 @@ class HelperTest extends TestCase
             ]
         ];
     }
+
+    public function testUsesAppropriateContentDirection(): void
+    {
+        app()->setLocale('fr');
+        self::assertEquals('ltr', i18n_dir());
+
+        app()->setLocale('ar');
+        self::assertEquals('rtl', i18n_dir());
+    }
 }

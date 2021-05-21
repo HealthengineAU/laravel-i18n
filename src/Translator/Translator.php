@@ -2,8 +2,8 @@
 
 namespace HealthEngine\I18n\Translator;
 
+use HealthEngine\I18n\Contracts\I18nTranslator as I18nTranslatorContractor;
 use HealthEngine\I18n\LanguageParser;
-use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
  * Enables the loading of fallback language for missing
  * keys when using JSON configuration instead of PHP files.
  */
-final class Translator implements TranslatorContract
+final class Translator implements I18nTranslatorContractor
 {
     private string $currentLanguage;
     private string $fallbackLanguage;
@@ -80,16 +80,26 @@ final class Translator implements TranslatorContract
     }
 
     /**
-     * @param string $language
+     * @param string $lang
      * @return void
      */
-    public function setLocale($language)
+    public function setLocale($lang)
     {
-        $language = LanguageParser::getPreferredLanguage($language, config('i18n.supported_languages'));
+        /** @var string[] $supported */
+        $supported = config('i18n.supported_languages');
+        $language = LanguageParser::getPreferredLanguage($lang, $supported);
 
-        if ($language !== null && $language !== $this->getLocale()) {
-            $this->currentLanguage = $language;
+        if ($language === null) {
+            Log::info(
+                'Attempted to use setLocale() for an unsupported language code: "' . $lang
+                . '". Supported language codes are: "' . implode('", "', $supported) . '".'
+            );
+
+            return;
         }
+
+        config(['i18n.language' => $language]);
+        $this->currentLanguage = $language;
     }
 
     /**
@@ -140,8 +150,9 @@ final class Translator implements TranslatorContract
                 /** @var string $closeTag */
                 $openTag = preg_replace('/([^ \/>]+) ?\/?>(<\/[a-z0-9]+>)?$/', '$1>', $tag);
                 $closeTag = preg_replace('/<([a-z0-9]+).*/', '</$1>', $tag);
-                $line = mb_eregi_replace("<$key>", $openTag, $line);
-                $line = mb_eregi_replace("<\/?$key\/?>", $closeTag, $line);
+                $line = mb_eregi_replace("<$key>", $openTag ?? '', $line);
+                $line = mb_eregi_replace("<\/?$key\/?>", $closeTag ?? '', $line === false ? '' : $line);
+                $line = $line === false ? '' : $line;
             } else {
                 //
                 // Single tags --> "<br/>"
@@ -168,5 +179,13 @@ final class Translator implements TranslatorContract
         return (new Collection($replace))->sortBy(function ($value, $key): int {
             return mb_strlen($key) * -1;
         })->all();
+    }
+
+    /**
+     * @return string Content direction string
+     */
+    public function direction(): string
+    {
+        return config('i18n.direction.languages.' . $this->getLocale(), config('i18n.direction.default', 'ltr'));
     }
 }

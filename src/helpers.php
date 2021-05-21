@@ -27,3 +27,17 @@ if (! function_exists('i18n')) {
         return $translator->get($key, $vars, $lang, $fallback, $markup);
     }
 }
+
+if (! function_exists('i18n_dir')) {
+
+    /**
+     * @return string The preferred content direction for the current language/locale.
+     */
+    function i18n_dir(): string
+    {
+        /** @var Translator $translator */
+        $translator = app('translator');
+
+        return $translator->direction();
+    }
+}

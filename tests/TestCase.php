@@ -13,7 +13,14 @@ class TestCase extends BaseTestCase
     {
         $app['config']['i18n.files.base_path'] = __DIR__ . '/resources/lang';
         $app['config']['i18n.files.namespaces'] = [ 'base', 'other' ];
-        $app['config']['i18n.supported_languages'] = [ 'en', 'fr', 'de' ];
+        $app['config']['i18n.supported_languages'] = [ 'en', 'fr', 'de', 'ar' ];
+        $app['config']['i18n.direction'] = [
+            'default' => 'btt',
+            'languages' => [
+                'ar' => 'rtl',
+                'fr' => 'ltr'
+            ]
+        ];
     }
 
     /**
