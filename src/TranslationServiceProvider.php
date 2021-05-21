@@ -54,14 +54,6 @@ final class TranslationServiceProvider extends ServiceProvider implements Deferr
                 $app['config']['i18n.files.namespaces']
             );
         });
-
-        $this->app->singleton('illuminate-translator', function ($app): Translator {
-            return new Translator(
-                $app['i18n.loader'],
-                $app['config']['i18n.language'],
-                $app['config']['i18n.files.namespaces']
-            );
-        });
     }
 
     protected function registerLanguageLoader(): void
