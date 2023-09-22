@@ -1,11 +1,13 @@
 <?php
 
-namespace HealthEngine\I18n\Http\Middleware;
+namespace Healthengine\I18n\Http\Middleware;
 
 use Closure;
-use HealthEngine\I18n\Contracts\LanguageDetector;
+use Healthengine\I18n\Contracts\LanguageDetector;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
+use UnexpectedValueException;
 
 class DetectLanguage
 {
@@ -48,12 +50,20 @@ class DetectLanguage
             }
         }
 
-        return config('i18n.language');
+        $configLanguage = config('i18n.language');
+
+        if (!is_string($configLanguage)) {
+            throw new UnexpectedValueException(
+                'Did not expect language config to be of type: ' . gettype($configLanguage)
+            );
+        }
+
+        return $configLanguage;
     }
 
     private function setLanguage(string $lang): void
     {
-        app()->setLocale($lang);
+        App::setLocale($lang);
 
         if ($this->saveCookie) {
             $cookie = config('i18n.http.parameter');

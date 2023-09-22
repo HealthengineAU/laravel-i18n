@@ -1,8 +1,9 @@
 <?php
 
-namespace HealthEngine\I18n;
+namespace Healthengine\I18n;
 
 use Illuminate\Support\Str;
+use UnexpectedValueException;
 
 /**
  * Parses Language Tags from Accept Language Header.
@@ -63,14 +64,19 @@ final class LanguageParser
     private static function mapLanguageEntry(string $languageEntry): array
     {
         $parts = Str::of($languageEntry)->explode(';')->all();
-        $languageTag = Str::of($parts[0] ?? '')->trim()->lower()->match('/^([a-z0-9-*]+)$/') ?? '';
+        $languageTag = Str::of($parts[0])->trim()->lower()->match('/^([a-z0-9-*]+)$/');
 
-        if (strlen($languageTag) === 0) {
+        if ($languageTag->length() === 0) {
             return [];
         }
 
-        $qualityRaw = Str::of($parts[1] ?? '')->match('/q ?= ?(0.[0-9]{1,3}|1.0)/') ?? '';
-        $qualityScalar = strlen($qualityRaw) > 0 ? (string)$qualityRaw : '1.0';
+        if (array_key_exists(1, $parts)) {
+            $qualityRaw = Str::of($parts[1])->match('/q ?= ?(0.[0-9]{1,3}|1.0)/');
+        } else {
+            $qualityRaw = Str::of('');
+        }
+
+        $qualityScalar = $qualityRaw->length() > 0 ? $qualityRaw->toString() : '1.0';
 
         return [(string)$languageTag => $qualityScalar];
     }
@@ -85,7 +91,16 @@ final class LanguageParser
     private static function getCompatibleLanguage(string $preferred, array $allowedLanguages): ?string
     {
         $preferred = Str::of($preferred)->replace('-*', '')->lower(); // Remove wildcards.
-        $preferred = config("i18n.fallback.{$preferred}") ?? $preferred;
+
+        $configPreferredLanguage = config("i18n.fallback.{$preferred}");
+
+        if (!is_string($configPreferredLanguage) && $configPreferredLanguage !== null) {
+            throw new UnexpectedValueException(
+                'Did not expect preferred language config to of type: ' . gettype($configPreferredLanguage)
+            );
+        }
+
+        $preferred = $configPreferredLanguage ?? $preferred;
 
         if (in_array($preferred, $allowedLanguages, true)) {
             return $preferred;

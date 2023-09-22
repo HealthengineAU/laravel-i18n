@@ -1,6 +1,6 @@
 <?php
 
-namespace HealthEngine\I18n\Tests\Middleware\Mocks;
+namespace Healthengine\I18n\Tests\Middleware\Mocks;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;

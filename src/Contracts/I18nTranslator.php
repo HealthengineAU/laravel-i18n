@@ -1,6 +1,6 @@
 <?php
 
-namespace HealthEngine\I18n\Contracts;
+namespace Healthengine\I18n\Contracts;
 
 use Illuminate\Contracts\Translation\Translator;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace HealthEngine\I18n\Translator;
+namespace Healthengine\I18n\Translator;
 
 use Illuminate\Filesystem\Filesystem;
 use RuntimeException;
@@ -44,6 +44,7 @@ final class LanguageLoader
      * @return array<string, string>
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \JsonException
      */
     private function loadLanguageFile(string $lang, string $namespace): array
     {
@@ -53,9 +54,9 @@ final class LanguageLoader
             return [];
         }
 
-        $decoded = json_decode($this->files->get($file), true);
+        $decoded = json_decode($this->files->get($file), true, 512, JSON_THROW_ON_ERROR);
 
-        if (is_null($decoded) || json_last_error() !== JSON_ERROR_NONE) {
+        if (!is_array($decoded)) {
             throw new RuntimeException("Translation file [{$file}] contains an invalid JSON structure.");
         }
 

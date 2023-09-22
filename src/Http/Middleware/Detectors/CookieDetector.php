@@ -1,8 +1,8 @@
 <?php
 
-namespace HealthEngine\I18n\Http\Middleware\Detectors;
+namespace Healthengine\I18n\Http\Middleware\Detectors;
 
-use HealthEngine\I18n\Contracts\LanguageDetector;
+use Healthengine\I18n\Contracts\LanguageDetector;
 use Illuminate\Http\Request;
 
 final class CookieDetector implements LanguageDetector

@@ -1,10 +1,10 @@
 <?php
 
-namespace HealthEngine\I18n\Tests\Middleware\Mocks;
+namespace Healthengine\I18n\Tests\Middleware\Mocks;
 
-use HealthEngine\I18n\Http\Middleware\AcceptLanguage;
-use HealthEngine\I18n\Http\Middleware\DetectLanguage;
-use HealthEngine\I18n\Http\Middleware\HasLanguage;
+use Healthengine\I18n\Http\Middleware\AcceptLanguage;
+use Healthengine\I18n\Http\Middleware\DetectLanguage;
+use Healthengine\I18n\Http\Middleware\HasLanguage;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class MockKernel extends HttpKernel

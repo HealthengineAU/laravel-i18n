@@ -1,20 +1,5 @@
-# composer
+/.idea/
+/.php-cs-fixer.cache
+/.phpunit.cache/
+/composer.lock
 /vendor/
-composer.lock
-
-# tests
-phpunit.xml
-clover.xml
-coverage*
-.phpunit.result.cache
-
-# system
-.DS_Store
-
-# editors
-.idea
-*.swp
-
-# lint
-.php_cs.cache
-.php_cs

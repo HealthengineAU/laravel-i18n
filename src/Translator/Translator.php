@@ -1,11 +1,12 @@
 <?php
 
-namespace HealthEngine\I18n\Translator;
+namespace Healthengine\I18n\Translator;
 
-use HealthEngine\I18n\Contracts\I18nTranslator as I18nTranslatorContractor;
-use HealthEngine\I18n\LanguageParser;
+use Healthengine\I18n\Contracts\I18nTranslator as I18nTranslatorContractor;
+use Healthengine\I18n\LanguageParser;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use UnexpectedValueException;
 
 /**
  * Enables the loading of fallback language for missing
@@ -20,7 +21,7 @@ final class Translator implements I18nTranslatorContractor
     /** @var string[] */
     private array $namespaces;
 
-    /** @var array<mixed> Loaded language files */
+    /** @var array<string, array<string, string>> Loaded language files */
     private array $loaded = [];
 
     /**
@@ -38,21 +39,21 @@ final class Translator implements I18nTranslatorContractor
 
     /**
      * @param string $key
-     * @param array $replace
-     * @param ?string $lang
+     * @param array<string, string> $replace
+     * @param ?string $locale
      * @param bool $fallback
      * @param string[] $markup
-     * @return mixed|string
+     * @return string
      */
-    public function get($key, array $replace = [], $lang = null, $fallback = true, $markup = [])
+    public function get($key, array $replace = [], $locale = null, $fallback = true, $markup = [])
     {
-        $lang = $lang ?? $this->currentLanguage;
+        $locale = $locale ?? $this->currentLanguage;
 
-        if (!isset($this->loaded[$lang])) {
-            $this->loaded[$lang] = $this->loader->load($lang, $this->namespaces);
+        if (!isset($this->loaded[$locale])) {
+            $this->loaded[$locale] = $this->loader->load($locale, $this->namespaces);
         }
 
-        $line = $this->loaded[$lang][$key] ?? null;
+        $line = $this->loaded[$locale][$key] ?? null;
 
         if ($fallback && $line === null) {
             return $this->get($key, $replace, $this->fallbackLanguage, false, $markup);
@@ -63,7 +64,6 @@ final class Translator implements I18nTranslatorContractor
 
         return $line;
     }
-
 
     public function choice($key, $number, array $replace = [], $locale = null)
     {
@@ -80,18 +80,18 @@ final class Translator implements I18nTranslatorContractor
     }
 
     /**
-     * @param string $lang
+     * @param string $locale
      * @return void
      */
-    public function setLocale($lang)
+    public function setLocale($locale)
     {
         /** @var string[] $supported */
         $supported = config('i18n.supported_languages');
-        $language = LanguageParser::getPreferredLanguage($lang, $supported);
+        $language = LanguageParser::getPreferredLanguage($locale, $supported);
 
         if ($language === null) {
             Log::info(
-                'Attempted to use setLocale() for an unsupported language code: "' . $lang
+                'Attempted to use setLocale() for an unsupported language code: "' . $locale
                 . '". Supported language codes are: "' . implode('", "', $supported) . '".'
             );
 
@@ -146,24 +146,46 @@ final class Translator implements I18nTranslatorContractor
                 //
                 // Open/closed tags --> "<b></b>"
                 //
-                /** @var string $openTag */
-                /** @var string $closeTag */
                 $openTag = preg_replace('/([^ \/>]+) ?\/?>(<\/[a-z0-9]+>)?$/', '$1>', $tag);
+
+                if ($openTag === null) {
+                    throw new UnexpectedValueException('Did not expect open tag to be `null`');
+                }
+
                 $closeTag = preg_replace('/<([a-z0-9]+).*/', '</$1>', $tag);
-                $line = mb_eregi_replace("<$key>", $openTag ?? '', $line);
-                $line = mb_eregi_replace("<\/?$key\/?>", $closeTag ?? '', $line === false ? '' : $line);
-                $line = $line === false ? '' : $line;
+
+                if ($closeTag === null) {
+                    throw new UnexpectedValueException('Did not expect closing tag to be `null`');
+                }
+
+                $line = mb_eregi_replace("<$key>", $openTag, $line);
+
+                if (!is_string($line)) {
+                    throw new UnexpectedValueException('Did not expect line to be `' . gettype($line) . '`');
+                }
+
+                $line = mb_eregi_replace("<\/?$key\/?>", $closeTag, $line);
+
+                if (!is_string($line)) {
+                    throw new UnexpectedValueException('Did not expect line to be `' . gettype($line) . '`');
+                }
             } else {
                 //
                 // Single tags --> "<br/>"
                 //
-                /** @var string $line */
                 $line = preg_replace("/<$key ?\/?>/", $tag, $line);
+
+                if ($line === null) {
+                    throw new UnexpectedValueException('Did not expect line to be `null`');
+                }
             }
         }
 
-        /** @var string $line */
         $line = preg_replace('/<\/?[0-9]+>/', '', $line); // Strips missed tags.
+
+        if ($line === null) {
+            throw new UnexpectedValueException('Did not expect line to be `null`');
+        }
 
         return $line;
     }
@@ -186,6 +208,17 @@ final class Translator implements I18nTranslatorContractor
      */
     public function direction(): string
     {
-        return config('i18n.direction.languages.' . $this->getLocale(), config('i18n.direction.default', 'ltr'));
+        $directionConfig = config(
+            'i18n.direction.languages.' . $this->getLocale(),
+            config('i18n.direction.default', 'ltr')
+        );
+
+        if (!is_string($directionConfig)) {
+            throw new UnexpectedValueException(
+                'Expected direction config to be `string`, got ' . gettype($directionConfig) . ' instead'
+            );
+        }
+
+        return $directionConfig;
     }
 }
