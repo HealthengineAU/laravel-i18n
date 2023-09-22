@@ -21,8 +21,6 @@ jobs:
     executor: php82
     steps:
       - run: sudo pecl install pcov
-      - run: '{ echo "pcov.enabled = 1;"; echo "pcov.directory = /home/circleci/project/src"; } | sudo tee /etc/php.d/pcov.ini'
-      - run: php -i
       - checkout
       - run: composer update
       - run: composer coverage
