@@ -3,7 +3,8 @@
 namespace Healthengine\I18n\Tests;
 
 /**
- * @covers ::i18n()
+ * @covers ::i18n
+ * @covers ::i18n_dir
  * @uses \Healthengine\I18n\LanguageParser
  * @uses \Healthengine\I18n\TranslationServiceProvider
  * @uses \Healthengine\I18n\Translator\LanguageLoader
