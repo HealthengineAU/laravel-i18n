@@ -20,7 +20,8 @@ jobs:
   coverage:
     executor: php82
     steps:
-      - run: sudo -E pecl install pcov && sudo -E docker-php-ext-enable pcov
+      - run: sudo pecl install pcov
+      - run: '{ echo "pcov.enabled = 1;"; echo "pcov.directory = /home/circleci/project/src"; } | sudo tee /usr/local/etc/php/pcov.ini'
       - checkout
       - run: composer update
       - run: composer coverage
