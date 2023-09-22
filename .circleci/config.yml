@@ -4,9 +4,11 @@ executors:
   php81:
     docker:
       - image: cimg/php:8.1
+    resource_class: small
   php82:
     docker:
       - image: cimg/php:8.2
+    resource_class: small
 
 jobs:
   analyse:
