@@ -6,6 +6,7 @@ use Healthengine\I18n\LanguageParser;
 
 /**
  * @covers \Healthengine\I18n\LanguageParser
+ * @uses \Healthengine\I18n\TranslationServiceProvider
  */
 class LanguageParserTest extends TestCase
 {
