@@ -20,6 +20,10 @@
     </testsuites>
 
     <source restrictDeprecations="true" restrictNotices="true" restrictWarnings="true">
+        <exclude>
+            <directory>lang</directory>
+            <directory>tests/resources</directory>
+        </exclude>
         <include>
             <directory>src</directory>
         </include>
