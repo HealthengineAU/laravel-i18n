@@ -1,8 +1,11 @@
 <?php
 
-namespace HealthEngine\I18n\Tests\Middleware;
+namespace Healthengine\I18n\Tests\Middleware;
 
-class DetectLanguageTest extends MiddlewareTest
+/**
+ * @covers \Healthengine\I18n\Http\Middleware\DetectLanguage
+ */
+class DetectLanguageTestCase extends MiddlewareTestCase
 {
     private const BASE_GET_URI = '/language/detect/get';
     private const BASE_POST_URI = '/language/detect/post';

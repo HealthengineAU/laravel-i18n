@@ -1,4 +1,7 @@
 # Laravel I18n
+
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/HealthEngineAU/laravel-i18n/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/HealthEngineAU/laravel-i18n/tree/main)
+
 This is a custom package designed for Laravel Eloquent. It provides helpers used to manage flat JSON files for
 localisation.
 

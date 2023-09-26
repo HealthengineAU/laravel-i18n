@@ -1,9 +1,9 @@
 <?php
 
-namespace HealthEngine\I18n\Http\Middleware;
+namespace Healthengine\I18n\Http\Middleware;
 
-use HealthEngine\I18n\Http\Middleware\Detectors\CookieDetector;
-use HealthEngine\I18n\Http\Middleware\Detectors\ParameterDetector;
+use Healthengine\I18n\Http\Middleware\Detectors\CookieDetector;
+use Healthengine\I18n\Http\Middleware\Detectors\ParameterDetector;
 
 final class HasLanguage extends DetectLanguage
 {

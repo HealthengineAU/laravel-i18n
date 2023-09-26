@@ -1,9 +1,9 @@
 <?php
 
-namespace HealthEngine\I18n\Tests;
+namespace Healthengine\I18n\Tests;
 
 use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationServiceProvider;
-use HealthEngine\I18n\TranslationServiceProvider;
+use Healthengine\I18n\TranslationServiceProvider;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 

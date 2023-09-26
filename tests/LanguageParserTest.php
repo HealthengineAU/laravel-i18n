@@ -1,9 +1,13 @@
 <?php
 
-namespace HealthEngine\I18n\Tests;
+namespace Healthengine\I18n\Tests;
 
-use HealthEngine\I18n\LanguageParser;
+use Healthengine\I18n\LanguageParser;
 
+/**
+ * @covers \Healthengine\I18n\LanguageParser
+ * @uses \Healthengine\I18n\TranslationServiceProvider
+ */
 class LanguageParserTest extends TestCase
 {
     /**
@@ -16,7 +20,7 @@ class LanguageParserTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function parseAcceptLanguageHeaderProvider(): array
+    public static function parseAcceptLanguageHeaderProvider(): array
     {
         return [
             'Multiple weighted types with quality values' => [

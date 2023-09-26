@@ -1,8 +1,8 @@
 <?php
 
-namespace HealthEngine\I18n\Http\Middleware;
+namespace Healthengine\I18n\Http\Middleware;
 
-use HealthEngine\I18n\Http\Middleware\Detectors\HeaderDetector;
+use Healthengine\I18n\Http\Middleware\Detectors\HeaderDetector;
 
 final class AcceptLanguage extends DetectLanguage
 {

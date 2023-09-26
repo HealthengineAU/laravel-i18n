@@ -1,15 +1,15 @@
 <?php
 
-namespace HealthEngine\I18n;
+namespace Healthengine\I18n;
 
-use HealthEngine\I18n\Http\Middleware\AcceptLanguage;
-use HealthEngine\I18n\Http\Middleware\Detectors\CookieDetector;
-use HealthEngine\I18n\Http\Middleware\Detectors\HeaderDetector;
-use HealthEngine\I18n\Http\Middleware\Detectors\ParameterDetector;
-use HealthEngine\I18n\Http\Middleware\DetectLanguage;
-use HealthEngine\I18n\Http\Middleware\HasLanguage;
-use HealthEngine\I18n\Translator\LanguageLoader;
-use HealthEngine\I18n\Translator\Translator;
+use Healthengine\I18n\Http\Middleware\AcceptLanguage;
+use Healthengine\I18n\Http\Middleware\Detectors\CookieDetector;
+use Healthengine\I18n\Http\Middleware\Detectors\HeaderDetector;
+use Healthengine\I18n\Http\Middleware\Detectors\ParameterDetector;
+use Healthengine\I18n\Http\Middleware\DetectLanguage;
+use Healthengine\I18n\Http\Middleware\HasLanguage;
+use Healthengine\I18n\Translator\LanguageLoader;
+use Healthengine\I18n\Translator\Translator;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,11 +23,11 @@ final class TranslationServiceProvider extends ServiceProvider implements Deferr
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/config/i18n.php' => config_path('i18n.php'),
+            __DIR__ . '/../config/i18n.php' => config_path('i18n.php'),
         ], ['config', 'i18n']);
 
         $this->publishes([
-            __DIR__ . '/resources/lang' => resource_path('lang'),
+            __DIR__ . '/../lang' => resource_path('lang'),
         ], ['lang', 'i18n']);
     }
 
@@ -39,7 +39,7 @@ final class TranslationServiceProvider extends ServiceProvider implements Deferr
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/config/i18n.php',
+            __DIR__ . '/../config/i18n.php',
             'i18n'
         );
 

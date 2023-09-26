@@ -1,6 +1,6 @@
 <?php
 
-use HealthEngine\I18n\Translator\Translator;
+use Healthengine\I18n\Translator\Translator;
 
 if (! function_exists('i18n')) {
 

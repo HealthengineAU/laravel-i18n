@@ -1,15 +1,15 @@
 <?php
 
-namespace HealthEngine\I18n\Tests\Middleware;
+namespace Healthengine\I18n\Tests\Middleware;
 
-use HealthEngine\I18n\Tests\Middleware\Mocks\MockController;
-use HealthEngine\I18n\Tests\Middleware\Mocks\MockKernel;
-use HealthEngine\I18n\Tests\TestCase;
+use Healthengine\I18n\Tests\Middleware\Mocks\MockController;
+use Healthengine\I18n\Tests\Middleware\Mocks\MockKernel;
+use Healthengine\I18n\Tests\TestCase;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Router;
 
-abstract class MiddlewareTest extends TestCase
+abstract class MiddlewareTestCase extends TestCase
 {
     protected const DEFAULT_HEADERS = ['Accept-Language' => ''];
 

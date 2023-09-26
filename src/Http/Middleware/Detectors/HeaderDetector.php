@@ -1,9 +1,9 @@
 <?php
 
-namespace HealthEngine\I18n\Http\Middleware\Detectors;
+namespace Healthengine\I18n\Http\Middleware\Detectors;
 
-use HealthEngine\I18n\Contracts\LanguageDetector;
-use HealthEngine\I18n\LanguageParser;
+use Healthengine\I18n\Contracts\LanguageDetector;
+use Healthengine\I18n\LanguageParser;
 use Illuminate\Http\Request;
 
 final class HeaderDetector implements LanguageDetector
@@ -27,6 +27,14 @@ final class HeaderDetector implements LanguageDetector
             $header = implode(',', $header);
         }
 
-        return LanguageParser::getPreferredLanguage($header, config('i18n.supported_languages'));
+        $configSupportedLanguages = config('i18n.supported_languages');
+
+        if (!is_array($configSupportedLanguages)) {
+            throw new \UnexpectedValueException(
+                'Did not expect supported languages config to be of type: ' . gettype($configSupportedLanguages)
+            );
+        }
+
+        return LanguageParser::getPreferredLanguage($header, $configSupportedLanguages);
     }
 }

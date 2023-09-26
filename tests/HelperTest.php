@@ -1,7 +1,15 @@
 <?php
 
-namespace HealthEngine\I18n\Tests;
+namespace Healthengine\I18n\Tests;
 
+/**
+ * @covers ::i18n
+ * @covers ::i18n_dir
+ * @uses \Healthengine\I18n\LanguageParser
+ * @uses \Healthengine\I18n\TranslationServiceProvider
+ * @uses \Healthengine\I18n\Translator\LanguageLoader
+ * @uses \Healthengine\I18n\Translator\Translator
+ */
 class HelperTest extends TestCase
 {
     public function testSubstitutesVariables(): void
@@ -42,7 +50,7 @@ class HelperTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function markupSubstitutionProvider(): array
+    public static function markupSubstitutionProvider(): array
     {
         return [
             'Inserts at correct index' => [
