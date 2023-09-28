@@ -7,10 +7,43 @@ localisation.
 
 ## Setup
 
-* Install the package: `composer require healthengine/laravel-i18n`
-* In `config/app.php`:
-    * Replace the `Illuminate\Support\TranslationServiceProvider` with `HealthEngine\I18n\TranslationServiceProvider`
-* Run `php artisan vendor:publish --provider="HealthEngine\I18n\TranslationServiceProvider"`
+Configure composer repository:
+
+```shell
+composer config repositories.healthengine/laravel-i18n git git@github.com:HealthEngineAU/laravel-i18n.git
+```
+
+Install:
+
+```shell
+composer require healthengine/laravel-i18n
+```
+
+Update providers in `config/app.php` to replace Laravel's stock translation provider with the one of this library:
+
+```php
+<?php
+
+use Illuminate\Support\ServiceProvider;
+
+return [
+    // ...
+
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        // ...
+    ])->replace([
+        Illuminate\Translation\TranslationServiceProvider::class => Healthengine\I18n\TranslationServiceProvider::class,
+    ]),
+
+    // ...
+];
+```
+
+Publish resources:
+
+```shell
+php artisan vendor:publish --provider="Healthengine\I18n\TranslationServiceProvider"
+```
 
 ## Usage
 
@@ -70,9 +103,9 @@ You can add any of the attached middlwares to associate languages with requests:
 
 ```php
 protected $routeMiddleware = [
-    'accept-lang' => \HealthEngine\I18n\Middleware\AcceptLanguage::class,
-    'has-lang' => \HealthEngine\I18n\Middleware\HasLanguage::class,
-    'detect-lang' => \HealthEngine\I18n\Middleware\DetectLanguage::class,
+    'accept-lang' => \Healthengine\I18n\Middleware\AcceptLanguage::class,
+    'has-lang' => \Healthengine\I18n\Middleware\HasLanguage::class,
+    'detect-lang' => \Healthengine\I18n\Middleware\DetectLanguage::class,
 ];
 
 ```
