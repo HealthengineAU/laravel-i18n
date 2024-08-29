@@ -1,3 +1,8 @@
+> [!WARNING]
+> This package is abandoned, you should avoid using it.
+>
+> Use [localization feature](https://laravel.com/docs/master/localization) of [laravel/framework](https://github.com/laravel/framework) instead.
+
 # Laravel I18n
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/HealthEngineAU/laravel-i18n/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/HealthEngineAU/laravel-i18n/tree/main)

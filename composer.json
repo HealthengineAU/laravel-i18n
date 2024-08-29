@@ -1,4 +1,5 @@
 {
+    "abandoned": "laravel/framework",
     "name": "healthengine/laravel-i18n",
     "description": "I18n/Translation providers for Laravel",
     "keywords": ["laravel", "i18n"],
