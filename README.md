@@ -1,9 +1,7 @@
 > [!WARNING]
-> This repository is archived.
+> This package is abandoned, you should avoid using it.
 >
-> Use [laravel/framework](https://github.com/laravel/framework) instead.
->
-> [Localization - Laravel](https://laravel.com/docs/master/localization)
+> Use [localization feature](https://laravel.com/docs/master/localization) of [laravel/framework](https://github.com/laravel/framework) instead.
 
 # Laravel I18n
 
