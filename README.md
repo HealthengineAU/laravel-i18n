@@ -1,3 +1,10 @@
+> [!WARNING]
+> This repository is archived.
+>
+> Use [laravel/framework](https://github.com/laravel/framework) instead.
+>
+> [Localization - Laravel](https://laravel.com/docs/master/localization)
+
 # Laravel I18n
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/HealthEngineAU/laravel-i18n/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/HealthEngineAU/laravel-i18n/tree/main)
